@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System HACKING</title>
+<title>WEB HACKING</title>
 
 <meta name="theme-color" content="#000000">
 
@@ -80,7 +80,7 @@ button{
   font-size:16px;
 }
 
-/* FULLSCREEN MODE */
+/* FULLSCREEN */
 #hackScreen{
   position:fixed;
   inset:0;
@@ -111,16 +111,17 @@ button{
   animation:glitch .15s infinite;
 }
 
-/* FBI TEXT DIKECILIN DIKIT */
+/* FBI TEXT FIX */
 #fbi{
   display:none;
-  font-size:44px;
-  font-weight:900;
+  font-size:28px;              /* 👈 LEBIH KECIL */
+  font-weight:700;
   margin-top:20px;
+  text-align:center;           /* 👈 TENGAH */
   color:#00ff00;
   text-shadow:
-    0 0 20px #00ff00,
-    0 0 60px #00ff00;
+    0 0 10px #00ff00,
+    0 0 25px #00ff00;
   animation:blink .6s infinite;
 }
 
@@ -136,8 +137,11 @@ button{
 <body>
 
 <div class="container">
-  <h1>⚠️ Web Hacking ⚠️</h1>
-  <div class="subtitle">⚠️ Jangan disalahgunakan<br>Web dengan bypass protokol tinggi 😈</div>
+  <h1>⚠️ WEB HACKING ⚠️</h1>
+  <div class="subtitle">
+    ⚠️ Jangan disalahgunakan⚠️<br>
+    Web dengan bypass protokol tinggi 😈
+  </div>
   <input id="target" type="text" placeholder="https://target.com">
   <button onclick="executeHack()">EXECUTE</button>
 </div>
@@ -153,25 +157,25 @@ button{
 
 <script>
 function executeHack(){
-  const input = document.getElementById("target").value.trim();
+  const input=document.getElementById("target").value.trim();
 
   if(!input.startsWith("https://")){
     alert("Target harus diawali https://");
     return;
   }
 
-  document.querySelector('meta[name="theme-color"]').setAttribute("content", "#00ff00");
+  document.querySelector('meta[name="theme-color"]').setAttribute("content","#00ff00");
 
-  if (document.documentElement.requestFullscreen) {
+  if(document.documentElement.requestFullscreen){
     document.documentElement.requestFullscreen();
   }
 
-  const screen = document.getElementById("hackScreen");
-  const loading = document.getElementById("loading");
-  const boong = document.getElementById("boong");
-  const fbi = document.getElementById("fbi");
-  const success = document.getElementById("successSound");
-  const alarm = document.getElementById("alarmSound");
+  const screen=document.getElementById("hackScreen");
+  const loading=document.getElementById("loading");
+  const boong=document.getElementById("boong");
+  const fbi=document.getElementById("fbi");
+  const success=document.getElementById("successSound");
+  const alarm=document.getElementById("alarmSound");
 
   screen.style.display="flex";
   success.play();
@@ -184,8 +188,8 @@ function executeHack(){
   setTimeout(()=>{
     boong.style.display="none";
     fbi.style.display="block";
-    alarm.loop = true;      // 🔁 SOUND BERULANG
-    alarm.volume = 1;
+    alarm.loop=true;
+    alarm.volume=1;
     alarm.play();
   },6000);
 }
