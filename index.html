@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web Hack tools</title>
+<title>WEB HACKING</title>
 
 <meta name="theme-color" content="#000000">
 
@@ -55,9 +55,8 @@ h1{
 
 .subtitle{
   font-size:12px;
-  margin-bottom:15px;
   opacity:.85;
-  text-shadow:0 0 6px #00ff00;
+  margin-bottom:15px;
 }
 
 input{
@@ -81,16 +80,7 @@ button{
   font-size:16px;
 }
 
-/* ERROR TEXT */
-#error{
-  display:none;
-  margin-bottom:12px;
-  font-size:12px;
-  color:#00ff00;
-  text-shadow:0 0 8px #00ff00;
-}
-
-/* FULLSCREEN */
+/* FULLSCREEN MODE */
 #hackScreen{
   position:fixed;
   inset:0;
@@ -116,12 +106,21 @@ button{
   display:none;
   font-size:64px;
   font-weight:900;
-  color:#00ff00;
   text-align:center;
-  text-shadow:
-    0 0 15px #00ff00,
-    0 0 40px #00ff00;
+  text-shadow:0 0 30px #00ff00;
   animation:glitch .15s infinite;
+}
+
+#fbi{
+  display:none;
+  font-size:56px;
+  font-weight:900;
+  margin-top:20px;
+  color:#00ff00;
+  text-shadow:
+    0 0 20px #00ff00,
+    0 0 60px #00ff00;
+  animation:blink .6s infinite;
 }
 
 @keyframes glitch{
@@ -137,13 +136,7 @@ button{
 
 <div class="container">
   <h1>⚠️ WEB HACKING ⚠️</h1>
-  <div class="subtitle">
-    ⚠️ Jangan disalahgunakan⚠️<br>
-    Web Dengan Bypass Protokol Tinggi 😈
-  </div>
-
-  <div id="error">[ERROR] Target URL tidak valid</div>
-
+  <div class="subtitle">⚠️ Jangan disalahgunakan⚠️<br>Web dengan bypass protokol tinggi 😈</div>
   <input id="target" type="text" placeholder="https://target.com">
   <button onclick="executeHack()">EXECUTE</button>
 </div>
@@ -151,48 +144,49 @@ button{
 <div id="hackScreen">
   <div id="loading">Initializing exploit... Access granted...</div>
   <div id="boong">EH TAPI BOONG<br>AWOKAWOK 😹</div>
+  <div id="fbi">🚨 FBI IS COMING ⚠️ 🚨</div>
 </div>
 
-<audio id="successSound">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-system-beep-confirmation-2940.mp3">
-</audio>
+<audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-system-beep-confirmation-2940.mp3"></audio>
+<audio id="alarmSound" src="https://files.catbox.moe/e9uo2p.mp3"></audio>
 
 <script>
-function isValidTarget(url){
-  // HARUS diawali https://
-  if(!url.startsWith("https://")) return false;
-
-  // HARUS mengandung domain valid
-  const pattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
-  return pattern.test(url);
-}
-
 function executeHack(){
   const input = document.getElementById("target").value.trim();
-  const error = document.getElementById("error");
 
-  if(!isValidTarget(input)){
-    error.style.display="block";
+  /* VALIDASI HARUS HTTPS */
+  if(!input.startsWith("https://")){
+    alert("Target harus diawali https://");
     return;
   }
 
-  error.style.display="none";
+  const meta = document.querySelector('meta[name="theme-color"]');
+  meta.setAttribute("content", "#00ff00");
 
-  // ADDRESS BAR HIJAU NEON
-  document.querySelector('meta[name="theme-color"]')
-    .setAttribute("content", "#00ff00");
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
 
-  // FULLSCREEN
-  const el=document.documentElement;
-  if(el.requestFullscreen) el.requestFullscreen();
+  const screen = document.getElementById("hackScreen");
+  const loading = document.getElementById("loading");
+  const boong = document.getElementById("boong");
+  const fbi = document.getElementById("fbi");
+  const success = document.getElementById("successSound");
+  const alarm = document.getElementById("alarmSound");
 
-  document.getElementById("hackScreen").style.display="flex";
-  document.getElementById("successSound").play();
+  screen.style.display="flex";
+  success.play();
 
   setTimeout(()=>{
-    document.getElementById("loading").style.display="none";
-    document.getElementById("boong").style.display="block";
+    loading.style.display="none";
+    boong.style.display="block";
   },3000);
+
+  setTimeout(()=>{
+    boong.style.display="none";
+    fbi.style.display="block";
+    alarm.volume = 1;
+    alarm.play();
+  },6000);
 }
 </script>
 
