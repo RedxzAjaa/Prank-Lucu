@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Hack tools</title>
+
+<meta name="theme-color" content="#000000">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:monospace;
+  background:black;
+  color:#00ff00;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(#00ff0022 1px, transparent 1px),
+    linear-gradient(90deg,#00ff0022 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:moveGrid 8s linear infinite;
+  z-index:-1;
+}
+
+@keyframes moveGrid{
+  from{background-position:0 0}
+  to{background-position:40px 40px}
+}
+
+.container{
+  background:#000;
+  border:1px solid #00ff00;
+  padding:25px;
+  width:90%;
+  max-width:400px;
+  text-align:center;
+  box-shadow:0 0 30px #00ff00;
+}
+
+h1{
+  margin-bottom:10px;
+  text-shadow:0 0 10px #00ff00;
+}
+
+.subtitle{
+  font-size:12px;
+  margin-bottom:15px;
+  opacity:.85;
+  text-shadow:0 0 6px #00ff00;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:15px;
+  background:black;
+  border:1px solid #00ff00;
+  color:#00ff00;
+  outline:none;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  background:#00ff00;
+  color:black;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+  font-size:16px;
+}
+
+/* ERROR TEXT */
+#error{
+  display:none;
+  margin-bottom:12px;
+  font-size:12px;
+  color:#00ff00;
+  text-shadow:0 0 8px #00ff00;
+}
+
+/* FULLSCREEN */
+#hackScreen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+}
+
+#loading{
+  font-size:18px;
+  margin-bottom:20px;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0}
+}
+
+#boong{
+  display:none;
+  font-size:64px;
+  font-weight:900;
+  color:#00ff00;
+  text-align:center;
+  text-shadow:
+    0 0 15px #00ff00,
+    0 0 40px #00ff00;
+  animation:glitch .15s infinite;
+}
+
+@keyframes glitch{
+  0%{transform:translate(0)}
+  25%{transform:translate(3px,-3px)}
+  50%{transform:translate(-3px,3px)}
+  75%{transform:translate(3px,3px)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>⚠️ WEB HACKING ⚠️</h1>
+  <div class="subtitle">
+    ⚠️ Jangan disalahgunakan⚠️<br>
+    Web Dengan Bypass Protokol Tinggi 😈
+  </div>
+
+  <div id="error">[ERROR] Target URL tidak valid</div>
+
+  <input id="target" type="text" placeholder="https://target.com">
+  <button onclick="executeHack()">EXECUTE</button>
+</div>
+
+<div id="hackScreen">
+  <div id="loading">Initializing exploit... Access granted...</div>
+  <div id="boong">EH TAPI BOONG<br>AWOKAWOK 😹</div>
+</div>
+
+<audio id="successSound">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-system-beep-confirmation-2940.mp3">
+</audio>
+
+<script>
+function isValidTarget(url){
+  // HARUS diawali https://
+  if(!url.startsWith("https://")) return false;
+
+  // HARUS mengandung domain valid
+  const pattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+  return pattern.test(url);
+}
+
+function executeHack(){
+  const input = document.getElementById("target").value.trim();
+  const error = document.getElementById("error");
+
+  if(!isValidTarget(input)){
+    error.style.display="block";
+    return;
+  }
+
+  error.style.display="none";
+
+  // ADDRESS BAR HIJAU NEON
+  document.querySelector('meta[name="theme-color"]')
+    .setAttribute("content", "#00ff00");
+
+  // FULLSCREEN
+  const el=document.documentElement;
+  if(el.requestFullscreen) el.requestFullscreen();
+
+  document.getElementById("hackScreen").style.display="flex";
+  document.getElementById("successSound").play();
+
+  setTimeout(()=>{
+    document.getElementById("loading").style.display="none";
+    document.getElementById("boong").style.display="block";
+  },3000);
+}
+</script>
+
+</body>
+</html>
