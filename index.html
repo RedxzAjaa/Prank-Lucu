@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WEB HACKING</title>
+<title>System HACKING</title>
 
 <meta name="theme-color" content="#000000">
 
@@ -111,9 +111,10 @@ button{
   animation:glitch .15s infinite;
 }
 
+/* FBI TEXT DIKECILIN DIKIT */
 #fbi{
   display:none;
-  font-size:56px;
+  font-size:44px;
   font-weight:900;
   margin-top:20px;
   color:#00ff00;
@@ -135,8 +136,8 @@ button{
 <body>
 
 <div class="container">
-  <h1>⚠️ WEB HACKING ⚠️</h1>
-  <div class="subtitle">⚠️ Jangan disalahgunakan⚠️<br>Web dengan bypass protokol tinggi 😈</div>
+  <h1>⚠️ Web Hacking ⚠️</h1>
+  <div class="subtitle">⚠️ Jangan disalahgunakan<br>Web dengan bypass protokol tinggi 😈</div>
   <input id="target" type="text" placeholder="https://target.com">
   <button onclick="executeHack()">EXECUTE</button>
 </div>
@@ -154,17 +155,16 @@ button{
 function executeHack(){
   const input = document.getElementById("target").value.trim();
 
-  /* VALIDASI HARUS HTTPS */
   if(!input.startsWith("https://")){
     alert("Target harus diawali https://");
     return;
   }
 
-  const meta = document.querySelector('meta[name="theme-color"]');
-  meta.setAttribute("content", "#00ff00");
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", "#00ff00");
 
-  const el = document.documentElement;
-  if (el.requestFullscreen) el.requestFullscreen();
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 
   const screen = document.getElementById("hackScreen");
   const loading = document.getElementById("loading");
@@ -184,6 +184,7 @@ function executeHack(){
   setTimeout(()=>{
     boong.style.display="none";
     fbi.style.display="block";
+    alarm.loop = true;      // 🔁 SOUND BERULANG
     alarm.volume = 1;
     alarm.play();
   },6000);
