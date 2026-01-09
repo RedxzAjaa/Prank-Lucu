@@ -1,0 +1,2 @@
+# Prank-Lucu
+Buat prank
