@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WEB HACKING</title>
-
 <meta name="theme-color" content="#000000">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
   font-family:monospace;
   background:black;
@@ -20,7 +18,6 @@ body{
   justify-content:center;
   overflow:hidden;
 }
-
 body::before{
   content:"";
   position:fixed;
@@ -32,12 +29,10 @@ body::before{
   animation:moveGrid 8s linear infinite;
   z-index:-1;
 }
-
 @keyframes moveGrid{
   from{background-position:0 0}
   to{background-position:40px 40px}
 }
-
 .container{
   background:#000;
   border:1px solid #00ff00;
@@ -47,18 +42,8 @@ body::before{
   text-align:center;
   box-shadow:0 0 30px #00ff00;
 }
-
-h1{
-  margin-bottom:10px;
-  text-shadow:0 0 10px #00ff00;
-}
-
-.subtitle{
-  font-size:12px;
-  opacity:.85;
-  margin-bottom:15px;
-}
-
+h1{margin-bottom:10px;text-shadow:0 0 10px #00ff00}
+.subtitle{font-size:12px;opacity:.85;margin-bottom:15px}
 input{
   width:100%;
   padding:12px;
@@ -66,9 +51,7 @@ input{
   background:black;
   border:1px solid #00ff00;
   color:#00ff00;
-  outline:none;
 }
-
 button{
   width:100%;
   padding:14px;
@@ -79,8 +62,6 @@ button{
   cursor:pointer;
   font-size:16px;
 }
-
-/* FULLSCREEN */
 #hackScreen{
   position:fixed;
   inset:0;
@@ -91,17 +72,13 @@ button{
   flex-direction:column;
   z-index:9999;
 }
-
-#loading{
-  font-size:18px;
-  margin-bottom:20px;
-  animation:blink 1s infinite;
-}
-
-@keyframes blink{
-  50%{opacity:0}
-}
-
+#loading{font-size:18px;margin-bottom:10px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+#injectBox{width:80%;max-width:420px;display:none;margin-bottom:18px}
+#injectText{font-size:14px;margin-bottom:6px;text-align:left}
+#injectBar{width:100%;height:10px;border:1px solid #00ff00}
+#injectProgress{width:0%;height:100%;background:#00ff00;box-shadow:0 0 12px #00ff00}
+#info{font-size:12px;margin-top:8px;opacity:.85;text-align:left}
 #boong{
   display:none;
   font-size:64px;
@@ -110,21 +87,21 @@ button{
   text-shadow:0 0 30px #00ff00;
   animation:glitch .15s infinite;
 }
-
-/* FBI TEXT FIX */
 #fbi{
   display:none;
-  font-size:28px;              /* 👈 LEBIH KECIL */
-  font-weight:700;
+  font-size:26px;
   margin-top:20px;
-  text-align:center;           /* 👈 TENGAH */
-  color:#00ff00;
-  text-shadow:
-    0 0 10px #00ff00,
-    0 0 25px #00ff00;
+  text-align:center;
   animation:blink .6s infinite;
 }
-
+#ending{
+  display:none;
+  margin-top:24px;
+  text-align:center;
+  opacity:.85;
+}
+#endingText{font-size:14px;margin-bottom:6px}
+#binaryText{font-size:11px;opacity:.7;letter-spacing:1px}
 @keyframes glitch{
   0%{transform:translate(0)}
   25%{transform:translate(3px,-3px)}
@@ -139,7 +116,7 @@ button{
 <div class="container">
   <h1>⚠️ WEB HACKING ⚠️</h1>
   <div class="subtitle">
-    ⚠️ Jangan disalahgunakan⚠️<br>
+    ⚠️ Jangan disalahgunakan ⚠️<br>
     Web dengan bypass protokol tinggi 😈
   </div>
   <input id="target" type="text" placeholder="https://target.com">
@@ -147,52 +124,156 @@ button{
 </div>
 
 <div id="hackScreen">
-  <div id="loading">Initializing exploit... Access granted...</div>
+  <div id="loading">Initializing exploit...</div>
+
+  <div id="injectBox">
+    <div id="injectText">Injecting payload...</div>
+    <div id="injectBar"><div id="injectProgress"></div></div>
+    <div id="info"></div>
+  </div>
+
   <div id="boong">EH TAPI BOONG<br>AWOKAWOK 😹</div>
   <div id="fbi">🚨 FBI IS COMING ⚠️ 🚨</div>
+
+  <div id="ending">
+    <div id="endingText">Yahaha, gampang banget lu dibodohi 😹</div>
+    <div id="binaryText">
+      01000010 01101111 01100011 01101001 01101100 00100000
+      01001011 01101111 01100011 01100001 01101011
+    </div>
+  </div>
 </div>
 
+<!-- AUDIO -->
 <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-system-beep-confirmation-2940.mp3"></audio>
 <audio id="alarmSound" src="https://files.catbox.moe/e9uo2p.mp3"></audio>
+<audio id="loadingSound" src="https://files.catbox.moe/pzljrn.mp3" loop></audio>
 
 <script>
-function executeHack(){
-  const input=document.getElementById("target").value.trim();
+/* ===== WEB AUDIO API (ERROR + ENDING SFX) ===== */
+let audioCtx, errorBuffer, endingBuffer;
 
-  if(!input.startsWith("https://")){
+async function preloadAudio(){
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  const err = await fetch("https://files.catbox.moe/ckltxy.mp3");
+  errorBuffer = await audioCtx.decodeAudioData(await err.arrayBuffer());
+
+  const end = await fetch("https://files.catbox.moe/p96fnm.mp3");
+  endingBuffer = await audioCtx.decodeAudioData(await end.arrayBuffer());
+}
+preloadAudio();
+
+function playBuffer(buffer, volume=1){
+  const src = audioCtx.createBufferSource();
+  const gain = audioCtx.createGain();
+  src.buffer = buffer;
+  gain.gain.value = volume;
+  src.connect(gain).connect(audioCtx.destination);
+  src.start(audioCtx.currentTime); // 0 ms delay
+}
+
+/* ===== MAIN ===== */
+function executeHack(){
+  const val=document.getElementById("target").value.trim();
+  if(!val.startsWith("https://")){
     alert("Target harus diawali https://");
     return;
   }
 
-  document.querySelector('meta[name="theme-color"]').setAttribute("content","#00ff00");
-
-  if(document.documentElement.requestFullscreen){
-    document.documentElement.requestFullscreen();
-  }
+  document.documentElement.requestFullscreen?.();
+  audioCtx.resume();
 
   const screen=document.getElementById("hackScreen");
   const loading=document.getElementById("loading");
+  const injectBox=document.getElementById("injectBox");
+  const injectText=document.getElementById("injectText");
+  const injectProgress=document.getElementById("injectProgress");
+  const info=document.getElementById("info");
   const boong=document.getElementById("boong");
   const fbi=document.getElementById("fbi");
-  const success=document.getElementById("successSound");
-  const alarm=document.getElementById("alarmSound");
+  const ending=document.getElementById("ending");
+
+  document.getElementById("successSound").play();
 
   screen.style.display="flex";
-  success.play();
+  injectBox.style.display="block";
+  loading.style.display="none";
 
-  setTimeout(()=>{
-    loading.style.display="none";
-    boong.style.display="block";
-  },3000);
+  const loadingSound=document.getElementById("loadingSound");
+  loadingSound.currentTime=0;
+  loadingSound.volume=0.25;
+  loadingSound.play();
 
-  setTimeout(()=>{
-    boong.style.display="none";
-    fbi.style.display="block";
-    alarm.loop=true;
-    alarm.volume=1;
-    alarm.play();
-  },6000);
+  const fakeIP=`103.167.${r(10,99)}.${r(10,99)}`;
+  let lat=-6.2+Math.random()*0.3;
+  let lon=106.8+Math.random()*0.3;
+  let progress=0;
+  let triggered=false;
+
+  const steps=[
+    "Injecting payload...",
+    "Bypassing protocol...",
+    "Escalating privilege...",
+    "Hijacking session...",
+    "Dumping memory...",
+    "Tracking location...",
+    "Fingerprinting device..."
+  ];
+
+  const interval=setInterval(()=>{
+    if(progress<98){
+      progress+=Math.random()*5;
+      if(progress>98)progress=98;
+      injectProgress.style.width=progress+"%";
+      injectText.textContent=steps[Math.floor(Math.random()*steps.length)];
+      info.innerHTML=
+        `IP Address : ${fakeIP}<br>
+         Country : Indonesia 🇮🇩<br>
+         ISP : Telkom Indonesia<br>
+         Location : ${lat.toFixed(4)}, ${lon.toFixed(4)}<br>
+         Camera : ACTIVE<br>
+         Microphone : ACTIVE`;
+    }else{
+      clearInterval(interval);
+      if(triggered) return;
+      triggered=true;
+
+      loadingSound.pause();
+
+      injectProgress.style.width="98%";
+      injectProgress.style.background="red";
+      injectText.style.color="red";
+      injectText.textContent="⚠️ CONNECTION UNSTABLE - TRACE DETECTED";
+      playBuffer(errorBuffer,0.9);
+
+      setTimeout(()=>{
+        injectBox.style.display="none";
+        boong.style.display="block";
+      },2500);
+
+      setTimeout(()=>{
+        boong.style.display="none";
+        fbi.style.display="block";
+        const alarm=document.getElementById("alarmSound");
+        alarm.loop=true;
+        alarm.play();
+
+        setTimeout(()=>{
+          alarm.pause();
+          fbi.style.display="none";
+          ending.style.display="block";
+
+          /* 🔊 ENDING SFX – FAHHHHH (FRAME SAMA) */
+          playBuffer(endingBuffer,1);
+
+        },20000);
+      },5200);
+    }
+  },160);
 }
+
+function r(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 </script>
 
 </body>
